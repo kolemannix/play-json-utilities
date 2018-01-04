@@ -47,8 +47,8 @@ object AutoJson {
       case other => q"implicit val format: play.api.libs.json.Format[$name] = play.api.libs.json.Json.format[$name]"
     }
     maybeCompanion match {
-      case Some(q"object $name { ..$stats }") =>
-        q"object $name { ..$stats; $format }"
+      case Some(obj @ Defn.Object(mods, name, Template(early, parents, self, stats))) =>
+        obj.copy(templ = obj.templ.copy(stats = Some(stats.getOrElse(Nil) :+ format)))
       case None => q"object ${Term.Name(name.value)} { $format }"
     }
   }

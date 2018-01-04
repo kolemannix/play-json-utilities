@@ -17,6 +17,13 @@ class AutoJsonAnnotationSpec extends FreeSpec with Matchers {
     val iNeedThis: Int = 42
   }
 
+  trait MarkerTrait
+
+  @AutoJson case class WithCompanionModifiersAndParents(a: Int)
+  private object WithCompanionModifiersAndParents extends MarkerTrait { this: MarkerTrait =>
+    val iNeedThis: Int = 42
+  }
+
   private def assertRoundtrip[A: Format](exemplar: A): Unit = {
     Json.parse(Json.toJson(exemplar).toString).as[A] shouldBe exemplar
   }
@@ -52,6 +59,9 @@ class AutoJsonAnnotationSpec extends FreeSpec with Matchers {
   "Case classes with existing companion objects cause no problem" in {
     assertRoundtrip(WithCompanion(42))
     WithCompanion.iNeedThis shouldBe 42
+
+    assertRoundtrip(WithCompanionModifiersAndParents(42))
+    WithCompanionModifiersAndParents.iNeedThis shouldBe 42
   }
 
   "Case classes with no fields are rejected" in {
