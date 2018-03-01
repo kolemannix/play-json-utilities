@@ -1,6 +1,5 @@
-package com.kolemannix
+package com.kolemannix.playjson
 
-import com.kolemannix.playjson.AutoJson
 import org.scalatest.{ FreeSpec, Matchers }
 import play.api.libs.json._
 
@@ -8,7 +7,6 @@ class AutoJsonAnnotationSpec extends FreeSpec with Matchers {
 
   @AutoJson case class Foo(bar: String)
   @AutoJson(flatten = false) case class Foooo(bar: Int)
-
 
   @AutoJson case class Baz(a: Int, b: String, c: Foo, s: Seq[Foo])
 
